@@ -4,30 +4,34 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="" />
+    <link rel="stylesheet" href="./style.css" />
     <title>Ecommerce vue</title>
   </head>
   <body>
     <div id="app">
       <header>
-        <h3>PlatziCommerce</h3>
-        <button class="cart">Carro (0)</button>
-        <div class="cart-content">
+        <h3>Simple Ecommerce</h3>
+        <button class="cart" >Carro (0)</button>
+        <div class="cart-content" v-show="cartOpen">
           <div class="cart-content__product">
-            <img :src="product.image[0].image" alt="" />
-            <span>{{product.name}}-$ {{new Intl.Numberformat("es-CO").format(product.price)}}</span>
+            <img :src="product.images[0].image" :alt="product.name.toUpperCase()" />
+            <span>{{product.name}}-$ {{ new Intl.NumberFormat("es-CO").format(product.price)}}</span>
           </div>
           <div class="cart-content__product">
-            <img src="" alt="" />
-            <span>{{product.name}}-${{new Intl.Numberformat("es-CO").format(product.price)}}</span>
+            <img :src="product.images[1].image" :alt="product.name.toUpperCase()" />
+            <span>{{product.name}}-${{ new Intl.NumberFormat("es-CO").format(product.price)}}</span>
           </div>
         </div>
       </header>
       <main>
         <section class="product">
           <div class="product__thumbnails">
-            <div class="thumb active"></div>
-            <div class="thumb"></div>
+            <div class="thumb"
+             :class="{ active: activeImage === 0 }"
+             :style="{ backgroundImage:'url(' + product.images[0].thumbanil +')'}"></div>
+            <div 
+              :class="thumb" :class="{ active: activeImage === 1}"
+              :style="{ backgroundImage:'url(' + product.images[1].thumbanil +')'}"></div>
           </div>
           <div class="product__image">
             <img src="" alt="" />
@@ -36,10 +40,12 @@
         <section class="description">
           <h4>{{product.name.toUpperCase()}} {{product.store ===0? 
            " 😢 " : "  😎 " }}</h4>
-          <span class="badge new">Nuevo</span>
-          <span class="badge offer">Oferta</span>
-          <p class="description__status"></p>
-          <p class="description__price"> ${{new Intl.Numberformat("es-CO").format(product.price)}} </p>
+          <span class="badge new" v-if="product.new">Nuevo</span>
+          <span class="badge offer" v-if="product.offer">Oferta</span>
+          <p class="description__status" v-if="product.stock === 3">Quedan pocas unidades</p>
+          <p class="description__status" v-else-if="product.stock">Producto esta por terminarse!</p>
+          <p class="description__status" v-else>Ultima unidad disponible</p>
+          <p class="description__price"> $ {{ new Intl.NumberFormat("es-CO").format(product.price) }} </p>
           <p class="description__content">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt
             atque dolorum corporis, reiciendis eaque temporibus quod magnam amet
@@ -62,23 +68,25 @@
         data() {
           return {
            	product: {
-				name:"Camara",
-				price:450_000,
-				stock:0,
-				content:'tiene las mejores caracteristicas del mercado , muy buena ampliacion de la imagen',
-				images: [
-					{
-						image:"./images/camara.jpg",
-						thumbnail:"./images/camara-thumb.jpg"
-					},
-					{
-						image:"./images/camara-2.jpg",
-						thumbnail:"./images/camara-2-thumb.jpg"
-					}
-
-				]
-
-		   	}
+				      name:"Camara",
+				      price:450_000,
+				      stock:2,
+				      content:'tiene las mejores caracteristicas del mercado , muy buena ampliacion de la imagen',
+				      images: [
+					      {
+						      image:"./images/camara.jpg",
+						      thumbnail:"./images/camara-thumb.jpg"
+					      },
+					      {
+						      image:"./images/camara-2.jpg",
+						      thumbnail:"./images/camara-2-thumb.jpg"
+					      }
+              ],
+              new:false,
+              offer:true
+            },
+            cartOpen:true,
+            activeImage:0
           };
         },
       });
