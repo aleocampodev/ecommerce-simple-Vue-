@@ -13,13 +13,9 @@
         <h3>Simple Ecommerce</h3>
         <button class="cart" >Carro (0)</button>
         <div class="cart-content" v-show="cartOpen">
-          <div class="cart-content__product">
+          <div class="cart-content__product" v-for="(product, index) in cart" :key="product.name" :class="{'bg-gray': index & 1}" >
             <img :src="product.images[0].image" :alt="product.name.toUpperCase()" />
             <span>{{product.name}}-$ {{ new Intl.NumberFormat("es-CO").format(product.price)}}</span>
-          </div>
-          <div class="cart-content__product">
-            <img :src="product.images[1].image" :alt="product.name.toUpperCase()" />
-            <span>{{product.name}}-${{ new Intl.NumberFormat("es-CO").format(product.price)}}</span>
           </div>
         </div>
       </header>
@@ -27,12 +23,10 @@
         <section class="product">
           <div class="product__thumbnails">
             <div class="thumb"
-             :class="{ active: activeImage === 0 }"
-             :style="{ backgroundImage:'url(' + product.images[0].thumbanil +')'}"></div>
-            <div 
-              :class="thumb" :class="{ active: activeImage === 1}"
-              :style="{ backgroundImage:'url(' + product.images[1].thumbanil +')'}"></div>
-          </div>
+            v-for="(image,index) in product.images"
+            :key="image.thumbanil"
+             :class="{ active: activeImage === index}"
+             :style="{ backgroundImage:'url(' + product.images[index].thumbanil +')'}"></div>
           <div class="product__image">
             <img src="" alt="" />
           </div>
